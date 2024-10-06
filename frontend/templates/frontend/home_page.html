@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f8fa;
+            display: flex;
+            flex-direction: column; /* Flexbox layout */
+            margin: 0;
+            min-height: 100vh; /* Ensure full height */
+        }
+        
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(24, 132, 115, 0.1);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .navbar-custom {
+            background-color: #004d40;
+        }
+        
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff;
+        }
+        
+        .navbar-custom .nav-link:hover {
+            color: #b2dfdb;
+        }
+        
+        .search-bar {
+            width: 300px;
+            margin-left: 20px;
+        }
+        
+        .btn-primary {
+            background-color: #00796b;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #004d40;
+        }
+        
+        .container {
+            flex: 1; /* Allow container to take available space */
+            margin-top: 30px;
+            margin-bottom: 30px; /* Add bottom margin for spacing */
+        }
+        
+        footer {
+            background-color: #004d40;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+        
+        .course-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px; /* Use margin for spacing around cards */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .course-card img {
+            width: 100%; /* Set width to 100% of the container */
+            height: 200px; /* Fixed height for the image to make it rectangular */
+            object-fit: cover; /* Crop image to fit while maintaining aspect ratio */
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .course-card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .course-card p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .row {
+            margin-bottom: 30px; /* Adding gap between rows */
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .search-bar {
+                width: 100%; /* Full width on small screens */
+                margin: 10px 0; /* Add margin for spacing */
+            }
+        
+            .course-card {
+                margin: 10px 0; /* Reduce margin on smaller screens */
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .course-card h4 {
+                font-size: 16px; /* Smaller heading on extra small screens */
+            }
+        
+            .course-card p {
+                font-size: 12px; /* Smaller text for descriptions */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <img src="http://sves.org.in/ecap/CollegeImages/title_head.jpg" alt="Sri Vasavi Engineering College" class="img-fluid" />
+    </header>
+
+    <!-- Navbar with Search Bar and Filters -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">SVEC LMS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}" id="homeLink">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Department
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="filterCourses();">All Departments</a>
+                            </li>
+                            {% for department in departments %}
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="filterCourses('{{ department.id }}');">{{ department.dept }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}" id="aboutLink">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout_page' %}">Logout</a>
+                    </li>
+                </ul>
+
+                <!-- Centered Search Bar -->
+                <form class="d-flex search-bar" aria-label="Search for courses">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search" id="navbarSearchInput">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 my-4">
+                <h3>Hello {{username}},</h3>
+                <h1>Welcome to the SVEC Learning Management System</h1>
+                <p class="lead">
+                    Here is an overview of the courses. Feel free to explore and learn something new today!
+                </p>
+            </div>
+        </div>
+
+        <div class="row" id="courseCardsContainer">
+            {% for course in courses %}
+                <div class="col-12 col-md-4 course-card" data-dept="{{ course.dept.id }}">
+                    <a href="{% url 'fetch_course_videos' course_name=course.course_name %}">
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" alt="{{ course.course_name }}" class="img-fluid" />  <!-- Display the course photo -->
+                        {% else %}
+                            <img src="https://srivasaviengg.ac.in/imagesbalu/vasavisvec_logo.png" alt="Default Image" class="img-fluid" />  <!-- Optional: display a default image if no photo is available -->
+                        {% endif %}
+                        <h4>{{ course.course_name }}</h4>
+                    </a>
+                    <p>{{ course.description }}</p>
+                </div>
+            {% empty %}
+                <p>No courses available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Sri Vasavi Engineering College. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for Search and Filters -->
+    <script>
+        // Dynamic Search Functionality for Navbar
+        document.getElementById('navbarSearchInput').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            const courseCards = document.querySelectorAll('.course-card');
+
+            courseCards.forEach(function (card) {
+                const title = card.querySelector('h4').textContent.toLowerCase();
+
+                if (title.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter courses based on selected department
+        function filterCourses(departmentId) {
+            const courseCards = document.querySelectorAll('.course-card');
+
+            courseCards.forEach(function (card) {
+                if (departmentId === undefined) {
+                    card.style.display = 'block'; // Show all courses
+                } else if (card.getAttribute('data-dept') === departmentId) {
+                    card.style.display = 'block'; // Show the course if it matches the selected department
+                } else {
+                    card.style.display = 'none'; // Hide if it doesn't match
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

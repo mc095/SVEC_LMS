@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LMS - {{ course.course_name }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .course-header {
+            background-color: rgba(0, 128, 0, 0.2); /* Peaceful green with low opacity */
+            color: white; /* Make text white to contrast with the background */
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 10px; /* Optional: add a subtle rounded border */
+            margin-top: 80px; /* Space for the fixed navbar */
+        }
+
+        .tabs-section {
+            margin: 30px;
+        }
+
+        .tabs-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        }
+
+        .video-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background-color: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .video-list-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .navbar-custom {
+            background-color: #004d40;
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff; /* Text color */
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #b2dfdb; /* Hover text color */
+        }
+
+        .search-bar {
+            width: 250px;
+            border: 1px solid #00897b;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: #004d40;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navbar with Search Bar and Filters -->
+     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SVEC LMS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}" id="homeLink">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Department
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="filterCourses();">All Departments</a>
+                            </li>
+                            {% for department in departments %}
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="filterCourses('{{ department.id }}');">{{ department.dept }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}" id="aboutLink">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+
+                <!-- Centered Search Bar -->
+                <form class="d-flex search-bar" aria-label="Search for courses">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search" id="navbarSearchInput">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Course Header -->
+    <div class="course-header my-5">
+        <h1>{{ course.course_name }}</h1>
+        <h5>Start Your Course Today!</h5>
+    </div>
+
+    <!-- Tabbed Content -->
+
+<div class="tabs-section">
+    <h5>Learning Videos</h5>
+    <div class="video-list">
+        {% for video in videos %}
+        <div class="video-list-item">
+            <a href="{% url 'fetch_course_videos' video.title %}" class="text-decoration-none" style="font-size: 20px;">
+                {{ video.title }}
+            </a>
+            <button class="btn btn-primary btn-sm ms-auto">Action</button> <!-- Add button here -->
+        </div>
+        {% empty %}
+        <div class="video-list-item">
+            <p>No videos available for this course.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

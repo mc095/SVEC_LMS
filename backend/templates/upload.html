@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    {% if form.media %}
+        {{ form.media }}
+    {% endif %}
+    
+    <h1 style="text-align: center;">Custom Admin Form</h1>
+    
+    <div style="display: flex; justify-content: center;">
+        <form method="post" enctype="multipart/form-data" style="width: 50%;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}

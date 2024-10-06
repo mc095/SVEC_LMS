@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <style>
+        html, body {
+            height: 100%; /* Set height to 100% for both html and body */
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Use flexbox for layout */
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f8fa;
+        }
+
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(24, 132, 115, 0.1);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .navbar-custom {
+            background-color: #004d40;
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #b2dfdb;
+        }
+
+        .container {
+            margin-top: 30px;
+            flex: 1; /* Make the container take up remaining space */
+        }
+
+        footer {
+            background-color: #004d40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%; /* Ensure footer is full width */
+            position: relative; /* Set position to relative */
+            margin-top: auto; /* Push footer to the bottom */
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .about-section,
+        .profile-section {
+            display: none; /* Initially hidden */
+            padding: 40px;
+            background-color: #e0f2f1;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: 20px auto;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .about-section h2,
+        .profile-section h2 {
+            font-size: 36px;
+            color: #004d40;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .about-section p,
+        .profile-section p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .icon-section {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .icon-box {
+            padding: 20px;
+            width: 200px;
+        }
+
+        .icon-box i {
+            font-size: 50px;
+            color: #00796b;
+            margin-bottom: 15px;
+        }
+
+        .icon-box h4 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .icon-box p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn-reset {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-reset:hover {
+            background-color: #004d40;
+        }
+
+        /* Animation */
+        .about-section,
+        .profile-section {
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <img src="http://sves.org.in/ecap/CollegeImages/title_head.jpg" alt="Sri Vasavi Engineering College" class="img-fluid" />
+    </header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">SVEC LMS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}" id="aboutLink">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}" id="profileLink">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="aboutLink">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout_page' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+
+        <!-- About Us Content -->
+        <div class="about-section" id="aboutSection" style="display: block;"> <!-- Show by default -->
+            <h2>About Sri Vasavi Engineering College LMS</h2>
+            <p>
+                Our Learning Management System (LMS) is designed to provide a modern, effective, and intuitive platform for students and faculty alike. 
+                By delivering a wealth of educational materials, interactive features, and comprehensive course content, we aim to streamline the learning process and foster academic success.
+            </p>
+            <p>
+                With our LMS, we offer a robust learning ecosystem where students can access video lectures, course materials, and assignments from anywhere, at any time.
+            </p>
+
+            <!-- Icon Section -->
+            <div class="icon-section">
+                <div class="icon-box">
+                    <i class="fas fa-laptop-code"></i>
+                    <h4>Interactive Learning</h4>
+                    <p>Engage with interactive resources that enhance your learning experience.</p>
+                </div>
+                <div class="icon-box">
+                    <i class="fas fa-users"></i>
+                    <h4>Community Support</h4>
+                    <p>Join a vibrant community of learners and educators.</p>
+                </div>
+                <div class="icon-box">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Track Progress</h4>
+                    <p>Monitor your learning journey with our built-in tracking features.</p>
+                </div>
+            </div>
+            <button class="btn-reset" onclick="resetSections()">Go Back</button>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-section" id="profileSection">
+            <h2>Student Profile</h2>
+            <div class="card-body" style="background-color: #e0f2f1;">
+                <p class="card-text"><strong>ID:</strong> {{ student.id }}</p>
+                <p class="card-text"><strong>Name:</strong> {{ student.name }}</p>
+                <p class="card-text"><strong>Branch:</strong> {{ student.branch }}</p>
+                <button class="btn-reset" onclick="resetPassword()">Reset Password</button>
+            </div>
+        </div>
+
+    </div> <!-- End of Container -->
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Sri Vasavi Engineering College. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Show the About section by default
+            document.getElementById("aboutSection").style.display = "block";
+
+            // Add event listeners for navigation links
+            document.getElementById("aboutLink").addEventListener("click", function () {
+                resetSections();
+                document.getElementById("aboutSection").style.display = "block";
+            });
+
+            document.getElementById("profileLink").addEventListener("click", function () {
+                resetSections();
+                document.getElementById("profileSection").style.display = "block";
+            });
+        });
+
+        function resetSections() {
+            // Hide all sections
+            document.querySelectorAll('.about-section, .profile-section').forEach(function (section) {
+                section.style.display = 'none';
+            });
+        }
+
+        function filterCourses(departmentId = null) {
+            // Function to filter courses by department
+            const courseCards = document.querySelectorAll('.course-card');
+            courseCards.forEach(card => {
+                if (departmentId === null || card.getAttribute('data-dept') === departmentId) {
+                    card.style.display = 'block'; // Show the card
+                } else {
+                    card.style.display = 'none'; // Hide the card
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LMS - Course Content</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            padding-top: 56px;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            width: 280px;
+            background-color: #f0f0f5;
+            border-right: 1px solid #ddd;
+            padding: 15px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                transform: translateX(-280px); /* Hide sidebar by default */
+            }
+            .sidebar.active {
+                transform: translateX(0); /* Show sidebar when active */
+            }
+        }
+        .sidebar h5 {
+            font-size: 18px;
+            padding: 10px 15px;
+            color: #004d40;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .list-group-item {
+            border: none;
+            padding: 10px 20px;
+            background-color: #ffffff;
+        }
+        .list-group-item a {
+            color: #004d40;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .list-group-item.active {
+            background-color: rgba(0, 77, 64, 0.2);
+            color: white;
+        }
+        .list-group-item:hover {
+            background-color: #e0f2f1;
+            cursor: pointer;
+        }
+        .list-group-item a:hover {
+            color: #00796b;
+        }
+        .float-end {
+            font-size: 14px;
+            color: #999;
+        }
+        .content {
+            margin-left: 280px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+        @media (max-width: 767.98px) {
+            .content {
+                margin-left: 0;
+            }
+        }
+        .video-controls {
+            margin-top: 15px;
+        }
+        .video-controls button {
+            background-color: #004d40;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .video-controls button:hover {
+            background-color: #00796b;
+        }
+        .navbar-custom {
+            background-color: #004d40;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #b2dfdb;
+        }
+        .search-bar {
+            width: 250px;
+            border: 1px solid #00897b;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: #004d40;
+        }
+        .search-bar:focus {
+            outline: none;
+            border-color: #004d40;
+        }
+        .close-sidebar {
+            cursor: pointer;
+            font-size: 18px;
+            color: #004d40;
+        }
+        .open-sidebar-btn {
+            display: none;
+            position: fixed;
+            top: 65px;
+            left: 15px;
+            background-color: #004d40;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            z-index: 1100;
+        }
+        @media (max-width: 767.98px) {
+            .open-sidebar-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SVEC LMS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout_page' %}">Logout</a>
+                    </li>
+                </ul>
+                <!-- Search Bar -->
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h5>
+            {{ course.course_name }}
+            <span class="close-sidebar" id="closeSidebarBtn">&times;</span>
+        </h5>
+        <ul class="list-group list-group-flush" id="videoList">
+            {% for video in videos %}
+            <li class="list-group-item video-list-item" data-video-url="{{ video.video_url }}">
+                <a href="#" onclick="playVideo('{{ video.video_url }}', '{{ forloop.counter0 }}', '{{ video.title }}')">{{ video.title }}</a>
+            </li>
+            {% empty %}
+            <li class="list-group-item">No videos available for this course.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Open Sidebar Button for small screens -->
+    <button id="openSidebarBtn" class="open-sidebar-btn"><<</button>
+
+    <!-- Main Content Area -->
+    <div class="content" id="mainContent">
+        <div class="course-header">
+            <div><br><br>
+                <h1 id="videoTitle">Select a Video</h1>
+                <br />
+            </div>
+        </div>
+
+        <!-- Video Player Section -->
+        <div class="video-player bg-light" style="height: 400px">
+            <video id="videoPlayer" width="100%" height="100%" controls controlsList="nodownload">
+                <source id="videoSource" src="" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video Controls Section -->
+        <div class="video-controls">
+            <button id="prevVideoBtn">Previous Video</button>
+            <button id="nextVideoBtn">Next Video</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let currentVideoIndex = -1; // Initialize to -1 to indicate no video is playing
+        const videoList = document.querySelectorAll(".video-list-item"); // Select all video list items
+
+        // Sidebar toggle functionality
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
+        const openSidebarBtn = document.getElementById("openSidebarBtn");
+        const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+
+        closeSidebarBtn.addEventListener("click", () => {
+            sidebar.style.transform = "translateX(-280px)";
+            mainContent.style.marginLeft = "0";
+            openSidebarBtn.style.display = "block";
+        });
+
+        openSidebarBtn.addEventListener("click", () => {
+            sidebar.style.transform = "translateX(0)";
+            mainContent.style.marginLeft = "280px";
+            openSidebarBtn.style.display = "none";
+        });
+
+        // Function to play a selected video
+        function playVideo(videoUrl, index, title) {
+            const videoPlayer = document.getElementById("videoPlayer");
+            const videoTitleDisplay = document.getElementById("videoTitle"); // Get the video title display element
+            
+            videoPlayer.src = videoUrl; // Set the video source
+            videoTitleDisplay.innerText = title; // Display the selected video title
+            videoPlayer.play(); // Play the video
+            currentVideoIndex = index; // Update the current video index
+            highlightCurrentVideo(); // Highlight the active video
+        }
+
+        // Highlight the active video in the sidebar
+        function highlightCurrentVideo() {
+            videoList.forEach((item, index) => {
+                if (index === currentVideoIndex) {
+                    item.classList.add("active");
+                } else {
+                    item.classList.remove("active");
+                }
+            });
+        }
+
+        // Add event listeners to each video item
+        videoList.forEach((item, index) => {
+            item.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the default anchor behavior
+                const videoUrl = this.getAttribute("data-video-url");
+                const title = this.querySelector("a").innerText; // Get the video title from the link text
+                playVideo(videoUrl, index, title); // Pass the video URL, index, and title
+            });
+        });
+
+        // Play the next video in the list
+        function playNextVideo() {
+            if (currentVideoIndex < videoList.length - 1) {
+                currentVideoIndex++;
+                const nextVideoUrl = videoList[currentVideoIndex].getAttribute("data-video-url");
+                const nextVideoTitle = videoList[currentVideoIndex].querySelector("a").innerText; // Get next video title
+                playVideo(nextVideoUrl, currentVideoIndex, nextVideoTitle);
+            }
+        }
+
+        // Play the previous video in the list
+        function playPreviousVideo() {
+            if (currentVideoIndex > 0) {
+                currentVideoIndex--;
+                const prevVideoUrl = videoList[currentVideoIndex].getAttribute("data-video-url");
+                const prevVideoTitle = videoList[currentVideoIndex].querySelector("a").innerText; // Get previous video title
+                playVideo(prevVideoUrl, currentVideoIndex, prevVideoTitle);
+            }
+        }
+
+        // Add event listeners for next and previous buttons
+        document.getElementById("nextVideoBtn").addEventListener("click", playNextVideo);
+        document.getElementById("prevVideoBtn").addEventListener("click", playPreviousVideo);
+    </script>
+</body>
+</html>

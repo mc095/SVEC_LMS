@@ -1,3 +1,4 @@
 django
 django-admin-soft-dashboard
 psycopg2
+django-jazzmin

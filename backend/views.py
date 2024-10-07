@@ -8,11 +8,29 @@ from firebase_admin import credentials, storage
 import pandas as pd
 # Create your views here.
 
-cred = credentials.Certificate(r"backend\resources\svec-lms-firebase-adminsdk-m7ljj-471ebd201c.json") 
+import os
+import firebase_admin
+from firebase_admin import credentials
+
+# Load Firebase configuration from environment variables
+firebase_config = {
+    "type": os.environ.get('TYPE'),
+    "project_id": os.environ.get('PROJECT_ID'),
+    "private_key_id": os.environ.get('PRIVATE_KEY_ID'),
+    "private_key": os.environ.get('PRIVATE_KEY').replace('\\n', '\n'),
+    "client_email": os.environ.get('CLIENT_EMAIL'),
+    "client_id": os.environ.get('CLIENT_ID'),
+    "auth_uri": os.environ.get('AUTH_URI'),
+    "token_uri": os.environ.get('TOKEN_URI'),
+    "auth_provider_x509_cert_url": os.environ.get('AUTH_PROVIDER_CERT_URL'),
+    "client_x509_cert_url": os.environ.get('CLIENT_CERT_URL')
+}
+
+# Initialize Firebase Admin SDK with environment-based credentials
+cred = credentials.Certificate(firebase_config)
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'svec-lms.appspot.com'
 })
-
 
 def add_video(request):
     form = CustomAdminForm(request.POST, request.FILES)

@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-h!be%%)357l)ytxe3x_xe@e7heempu48p+4s6+pc9%e^d(n!19
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'backend.Lms_Users'
@@ -91,14 +91,15 @@ WSGI_APPLICATION = 'svec_lms.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':'lms_db',
-        'HOST':'127.0.0.1',
-        'PORT':'5432',
-        'USER':'postgres',
-        'PASSWORD':'admin',
+        'NAME': 'lms_db_e5hf',
+        'HOST': 'dpg-cs1k2v0gph6c73almpo0-a.singapore-postgres.render.com',
+        'PORT': '5432',
+        'USER': 'lms_db_e5hf_user',
+        'PASSWORD': 'yXClnSfZYTxheu17uhNluo229kzWpSQQ',
     }
 }
 
